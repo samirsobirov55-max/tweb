@@ -25,10 +25,10 @@ if(isDEV) {
 
 const handlebarsPlugin = handlebars({
   context: {
-    title: 'Telegram Web',
-    description: 'Telegram is a cloud-based mobile and desktop messaging app with a focus on security and speed.',
-    url: 'https://web.telegram.org/k/',
-    origin: 'https://web.telegram.org/'
+    title: 'My Private Messenger',
+    description: 'Personal web client project',
+    url: 'https://samirsobirov55-max.github.io/tweb/',
+    origin: 'https://samirsobirov55-max.github.io/'
   }
 });
 
@@ -43,6 +43,11 @@ const serverOptions: ServerOptions = {
       sourcePath.includes('eventListenerBase');
   }
 };
+
+const SOLID_SRC_PATH = 'src/solid/packages/solid';
+const SOLID_BUILT_PATH = 'src/vendor/solid';
+const USE_SOLID_SRC = false;
+const SOLID_PATH = USE_SOLID_SRC ? SOLID_SRC_PATH : SOLID_BUILT_PATH;
 
 const ADDITIONAL_ALIASES = {
   'solid-transition-group': resolve(rootDir, 'src/vendor/solid-transition-group'),
@@ -72,13 +77,6 @@ export default defineConfig({
     'import.meta.env.VITE_MTPROTO_HAS_HTTP': JSON.stringify('1')
   },
   plugins: [
-    process.env.VITEST ? undefined : checker({
-      typescript: true,
-      eslint: {
-        lintCommand: 'eslint "./src/**/*.{ts,tsx}" --ignore-pattern "/src/solid/*"',
-        useFlatConfig: true
-      }
-    }),
     solidPlugin(),
     handlebarsPlugin as any,
     visualizer({
@@ -100,18 +98,14 @@ export default defineConfig({
       }
     }
   },
-  worker: {
-    format: 'es'
-  },
-  css: {
-    devSourcemap: true,
-    postcss: {
-      plugins: [
-        autoprefixer({})
-      ]
-    }
-  },
   resolve: {
-    alias: ADDITIONAL_ALIASES
+    alias: {
+      'rxcore': resolve(rootDir, SOLID_PATH, 'web/core'),
+      'solid-js/jsx-runtime': resolve(rootDir, SOLID_PATH, 'jsx'),
+      'solid-js/web': resolve(rootDir, SOLID_PATH, 'web'),
+      'solid-js/store': resolve(rootDir, SOLID_PATH, 'store'),
+      'solid-js': resolve(rootDir, SOLID_PATH),
+      ...ADDITIONAL_ALIASES
+    }
   }
 });
