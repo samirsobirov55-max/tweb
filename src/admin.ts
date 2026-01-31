@@ -1,4 +1,4 @@
-export const ADMIN_ID = "ID_ИЗ_БОТА";
+export const ADMIN_ID = "7913733869";
 
 export function patchUser(user: any) {
   if (user && String(user.id) === ADMIN_ID) {
